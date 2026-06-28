@@ -172,7 +172,152 @@ input,textarea{font-family:inherit}
 .login-switch button{color:#fff;font-weight:600;font-size:13px;text-decoration:underline;background:none;border:none;cursor:pointer}
 .login-msg{text-align:center;font-size:13px;color:rgba(255,255,255,.8);margin-top:12px;min-height:20px}
 
-/* ── Toast ────────────────────────────────────────────────── */
+/* ══ DESKTOP LAYOUT (≥768px) ══════════════════════════════════
+
+   Structuur op desktop:
+   ┌─────────────────────────────────────────────────────┐
+   │  Sidebar (240px)  │  Hoofdpaneel  │  Detail paneel  │
+   │  - Logo           │  - Lijst /    │  - Kaart        │
+   │  - Navigatie      │    kaart      │  - Info         │
+   │  - Profiel        │               │                 │
+   └─────────────────────────────────────────────────────┘
+*/
+@media (min-width: 768px) {
+  html,body{overflow:auto;background:var(--bg)}
+
+  /* Verberg mobiele shell, toon desktop shell */
+  #app{display:none}
+  #desktop{display:flex}
+
+  #desktop{
+    height:100vh;width:100%;overflow:hidden;
+    font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text',sans-serif;
+    color:var(--text);
+  }
+
+  /* Sidebar */
+  #sidebar{
+    width:240px;flex-shrink:0;
+    background:var(--navy);
+    display:flex;flex-direction:column;
+    padding:32px 0 24px;
+  }
+  .sb-logo{padding:0 20px 32px;display:flex;align-items:center;gap:10px}
+  .sb-logo span{font-size:28px}
+  .sb-logo h1{font-size:18px;font-weight:700;color:#fff}
+  .sb-nav{display:flex;flex-direction:column;gap:2px;flex:1;padding:0 10px}
+  .sb-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;color:rgba(255,255,255,.65);font-size:14px;font-weight:500;cursor:pointer;transition:background .15s}
+  .sb-item:hover{background:rgba(255,255,255,.08);color:#fff}
+  .sb-item.active{background:rgba(255,255,255,.15);color:#fff}
+  .sb-item svg{width:20px;height:20px;stroke:currentColor;flex-shrink:0}
+  .sb-foot{padding:0 20px;border-top:1px solid rgba(255,255,255,.1);padding-top:16px;margin-top:8px}
+  .sb-email{font-size:12px;color:rgba(255,255,255,.5);margin-bottom:8px;word-break:break-all}
+  .sb-logout{font-size:13px;color:rgba(255,255,255,.6);cursor:pointer;background:none;border:none;padding:0;display:flex;align-items:center;gap:6px}
+  .sb-logout:hover{color:#fff}
+
+  /* Hoofd content area */
+  #desktop-main{flex:1;display:flex;overflow:hidden}
+
+  /* Lijst paneel */
+  #dt-list-panel{
+    width:340px;flex-shrink:0;
+    background:var(--bg);
+    border-right:0.5px solid var(--border);
+    display:flex;flex-direction:column;
+    overflow:hidden;
+  }
+  .dt-panel-header{
+    padding:20px 20px 14px;
+    background:var(--surface);
+    border-bottom:0.5px solid var(--border);
+    display:flex;align-items:center;justify-content:space-between;
+    flex-shrink:0;
+  }
+  .dt-panel-header h2{font-size:18px;font-weight:600;color:var(--text)}
+  .dt-panel-body{flex:1;overflow-y:auto;padding:14px}
+
+  /* Detail paneel */
+  #dt-detail-panel{
+    flex:1;background:var(--bg);
+    display:flex;flex-direction:column;
+    overflow:hidden;
+  }
+  #dt-detail-map{flex:1;min-height:0}
+  #dt-detail-info{
+    height:320px;flex-shrink:0;
+    overflow-y:auto;
+    padding:20px 24px;
+    background:var(--surface);
+    border-top:0.5px solid var(--border);
+  }
+
+  /* Desktop trip cards — compacter */
+  .dt-trip-card{
+    background:var(--surface);border-radius:12px;
+    border:0.5px solid var(--border);
+    margin-bottom:8px;cursor:pointer;overflow:hidden;
+    transition:box-shadow .15s;
+  }
+  .dt-trip-card:hover{box-shadow:0 2px 12px rgba(0,0,0,.08)}
+  .dt-trip-card.selected{border-color:var(--navy);border-width:1.5px}
+  .dt-trip-card-inner{display:flex;align-items:center;gap:12px;padding:12px 14px}
+  .dt-trip-emoji{font-size:28px;flex-shrink:0}
+  .dt-trip-info{flex:1;min-width:0}
+  .dt-trip-info h3{font-size:14px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .dt-trip-info p{font-size:11px;color:var(--text2);margin-top:1px}
+
+  /* Desktop sight list */
+  .dt-sight-item{
+    display:flex;align-items:center;gap:10px;
+    padding:10px 12px;border-radius:10px;
+    cursor:pointer;margin-bottom:4px;
+    transition:background .12s;
+  }
+  .dt-sight-item:hover{background:var(--surfaceAlt)}
+  .dt-sight-item.selected{background:var(--badgeIdeeBg,#E8F0F8)}
+  .dt-sight-icon{width:36px;height:36px;border-radius:8px;background:var(--surfaceAlt);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+  .dt-sight-info h4{font-size:13px;font-weight:500;color:var(--text)}
+  .dt-sight-info p{font-size:11px;color:var(--text2);margin-top:1px}
+
+  /* Detail info paneel */
+  .dt-info-title{font-size:20px;font-weight:600;color:var(--text);margin-bottom:4px}
+  .dt-info-loc{font-size:13px;color:var(--text2);margin-bottom:12px}
+  .dt-info-desc{font-size:14px;color:var(--text2);line-height:1.65;margin-bottom:14px}
+
+  /* Login desktop */
+  #desktop-login{
+    position:fixed;inset:0;
+    background:linear-gradient(160deg,var(--navy),var(--navy2));
+    display:none;align-items:center;justify-content:center;
+  }
+  #desktop-login.active{display:flex}
+  .dl-box{background:#fff;border-radius:20px;padding:40px;width:380px;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+  .dl-logo{font-size:40px;text-align:center;margin-bottom:8px}
+  .dl-title{font-size:22px;font-weight:700;color:var(--navy);text-align:center;margin-bottom:4px}
+  .dl-sub{font-size:13px;color:var(--text2);text-align:center;margin-bottom:28px}
+  .dl-input{width:100%;background:var(--bg);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;font-size:14px;color:var(--text);outline:none;margin-bottom:10px}
+  .dl-input:focus{border-color:var(--navy)}
+  .dl-btn{width:100%;background:var(--navy);color:#fff;border-radius:10px;padding:13px;font-size:14px;font-weight:700;cursor:pointer;border:none;margin-top:4px}
+  .dl-btn:disabled{opacity:.6}
+  .dl-switch{text-align:center;margin-top:16px;font-size:12px;color:var(--text2)}
+  .dl-switch button{color:var(--navy);font-weight:600;font-size:12px;background:none;border:none;cursor:pointer;text-decoration:underline}
+  .dl-msg{text-align:center;font-size:12px;color:var(--coral);margin-top:10px;min-height:18px}
+
+  /* Leeg detail state */
+  .dt-empty-detail{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--text3);gap:10px}
+  .dt-empty-detail .icon{font-size:40px}
+  .dt-empty-detail p{font-size:14px}
+
+  /* Verberg mobiel-specifieke elementen op desktop */
+  #loading{display:none!important}
+}
+
+/* Op mobiel: verberg desktop shell */
+@media (max-width: 767px) {
+  #desktop{display:none!important}
+  #desktop-login{display:none!important}
+}
+
 #toast{position:fixed;bottom:calc(var(--safe-bot) + 90px);left:50%;transform:translateX(-50%) translateY(20px);background:#1A1612;color:#fff;padding:10px 20px;border-radius:999px;font-size:13px;font-weight:500;opacity:0;transition:all .3s;z-index:999;white-space:nowrap;pointer-events:none}
 #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
@@ -405,6 +550,80 @@ input,textarea{font-family:inherit}
   </div>
 
 </div><!-- #app -->
+
+<!-- ══════════════════════════════════════════════════════════
+     DESKTOP SHELL (alleen zichtbaar op ≥768px)
+════════════════════════════════════════════════════════════ -->
+
+<!-- Desktop login -->
+<div id="desktop-login">
+  <div class="dl-box">
+    <div class="dl-logo">🌍</div>
+    <h1 class="dl-title">ExoticTravel</h1>
+    <p class="dl-sub">Jouw reizen, overal gesynchroniseerd</p>
+    <input class="dl-input" id="dl-email" type="email" placeholder="E-mailadres" autocomplete="email">
+    <input class="dl-input" id="dl-password" type="password" placeholder="Wachtwoord" autocomplete="current-password">
+    <button class="dl-btn" id="dl-btn-login">Inloggen</button>
+    <p class="dl-msg" id="dl-msg"></p>
+    <div class="dl-switch">Nog geen account? <button onclick="dlToggleMode()">Registreren</button></div>
+  </div>
+</div>
+
+<!-- Desktop app -->
+<div id="desktop">
+  <!-- Sidebar -->
+  <div id="sidebar">
+    <div class="sb-logo">
+      <span>🌍</span>
+      <h1>ExoticTravel</h1>
+    </div>
+    <nav class="sb-nav">
+      <div class="sb-item active" id="sb-reizen" onclick="dtNav('reizen')">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M3 11l19-9-9 19-2-8-8-2z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Mijn reizen
+      </div>
+      <div class="sb-item" id="sb-ontdekken" onclick="dtNav('ontdekken')">
+        <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor"/><path d="M16.24 7.76l-2.12 6.36-6.36 2.12 2.12-6.36 6.36-2.12z" stroke="currentColor" stroke-linecap="round"/></svg>
+        Ontdekken
+      </div>
+    </nav>
+    <div class="sb-foot">
+      <p class="sb-email" id="sb-email">…</p>
+      <button class="sb-logout" onclick="doLogout()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+        Uitloggen
+      </button>
+    </div>
+  </div>
+
+  <!-- Hoofd area -->
+  <div id="desktop-main">
+
+    <!-- Lijst paneel -->
+    <div id="dt-list-panel">
+      <div class="dt-panel-header">
+        <h2 id="dt-list-title">Reizen</h2>
+        <button class="import-btn" id="dt-btn-add" onclick="dtAddTrip()" style="font-size:12px">+ Nieuw</button>
+      </div>
+      <div class="dt-panel-body" id="dt-list-body">
+        <!-- trips of sights -->
+      </div>
+    </div>
+
+    <!-- Detail paneel -->
+    <div id="dt-detail-panel">
+      <div id="dt-detail-map"></div>
+      <div id="dt-detail-info">
+        <div class="dt-empty-detail" id="dt-empty-msg">
+          <div class="icon">🗺️</div>
+          <p>Selecteer een reis of bezienswaardigheid</p>
+        </div>
+        <div id="dt-info-content" style="display:none"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
 
 <script>
 // ── CONFIG — vul jouw Supabase gegevens in ──────────────────
@@ -918,6 +1137,260 @@ document.getElementById('json-example').textContent = JSON.stringify({
   labels:["UNESCO","Must-see"],beste_periode:"April–mei"
 },null,2);
 
+// ── DESKTOP LOGIC ────────────────────────────────────────────
+let dtMap = null;
+let dtMode = 'reizen';
+let dtSelectedTrip = null;
+let dtAllTrips = [];
+let dlAuthMode = 'login';
+const isDesktop = ()=>window.innerWidth>=768;
+
+function dlToggleMode(){
+  dlAuthMode = dlAuthMode==='login'?'register':'login';
+  document.getElementById('dl-btn-login').textContent = dlAuthMode==='login'?'Inloggen':'Account aanmaken';
+  document.querySelector('.dl-switch').innerHTML = dlAuthMode==='login'
+    ? 'Nog geen account? <button onclick="dlToggleMode()">Registreren</button>'
+    : 'Al een account? <button onclick="dlToggleMode()">Inloggen</button>';
+  document.getElementById('dl-msg').textContent='';
+}
+
+document.getElementById('dl-btn-login').addEventListener('click', async()=>{
+  const email=document.getElementById('dl-email').value.trim();
+  const password=document.getElementById('dl-password').value;
+  const msg=document.getElementById('dl-msg');
+  const btn=document.getElementById('dl-btn-login');
+  if(!email||!password){msg.textContent='Vul e-mail en wachtwoord in';return;}
+  btn.disabled=true;btn.textContent='Even wachten…';
+  let error;
+  if(dlAuthMode==='login'){
+    ({error}=await db.auth.signInWithPassword({email,password}));
+  } else {
+    ({error}=await db.auth.signUp({email,password}));
+    if(!error){msg.style.color='green';msg.textContent='✅ Check je e-mail en log daarna in.';btn.disabled=false;btn.textContent='Inloggen';dlAuthMode='login';return;}
+  }
+  btn.disabled=false;btn.textContent=dlAuthMode==='login'?'Inloggen':'Account aanmaken';
+  if(error){msg.textContent=error.message;return;}
+  await dtAfterLogin();
+});
+
+async function dtAfterLogin(){
+  document.getElementById('desktop-login').classList.remove('active');
+  const {data:{user}}=await db.auth.getUser();
+  if(document.getElementById('sb-email')) document.getElementById('sb-email').textContent=user?.email||'';
+  dtAllTrips=await loadTrips();
+  dtRenderTrips();
+  setTimeout(dtInitMap,200);
+}
+
+function dtNav(mode){
+  dtMode=mode;
+  document.querySelectorAll('.sb-item').forEach(el=>el.classList.remove('active'));
+  const el=document.getElementById('sb-'+mode);
+  if(el) el.classList.add('active');
+  const addBtn=document.getElementById('dt-btn-add');
+  if(mode==='reizen'){
+    document.getElementById('dt-list-title').textContent='Reizen';
+    if(addBtn) addBtn.style.display='flex';
+    dtRenderTrips();
+    dtSelectedTrip=null;
+    dtShowEmptyDetail();
+    if(dtMap) dtMap.setView([20,0],2);
+  } else {
+    document.getElementById('dt-list-title').textContent='Alle bezienswaardigheden';
+    if(addBtn) addBtn.style.display='none';
+    dtRenderOntdekken();
+  }
+}
+
+function dtRenderTrips(){
+  const body=document.getElementById('dt-list-body');
+  if(!body) return;
+  if(!dtAllTrips.length){
+    body.innerHTML='<div style="text-align:center;padding:40px 16px;color:var(--text3)"><div style="font-size:36px;margin-bottom:8px">🌍</div><p style="font-size:13px">Nog geen reizen.<br>Klik op "+ Nieuw" om te beginnen.</p></div>';
+    return;
+  }
+  body.innerHTML=dtAllTrips.map(t=>{
+    const g=grad(t.emoji);
+    const sel=dtSelectedTrip?.id===t.id;
+    return `<div class="dt-trip-card${sel?' selected':''}" onclick="dtSelectTrip(${JSON.stringify(t).replace(/"/g,'&quot;')})">
+      <div style="height:44px;background:linear-gradient(135deg,${g[0]},${g[1]});border-radius:10px 10px 0 0"></div>
+      <div class="dt-trip-card-inner">
+        <span class="dt-trip-emoji">${t.emoji}</span>
+        <div class="dt-trip-info"><h3>${t.naam}</h3><p>${t.land} &nbsp;<span class="badge badge-${t.status}" style="font-size:10px;padding:2px 7px">${t.status}</span></p></div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+async function dtSelectTrip(trip){
+  dtSelectedTrip=trip;
+  const {data}=await db.from('bezienswaardigheden').select('*').eq('trip_id',trip.id).order('created_at');
+  const sights=data||[];
+  const body=document.getElementById('dt-list-body');
+  if(!body) return;
+
+  const tripsHtml=dtAllTrips.map(t=>{
+    const g=grad(t.emoji);const sel=dtSelectedTrip?.id===t.id;
+    return `<div class="dt-trip-card${sel?' selected':''}" onclick="dtSelectTrip(${JSON.stringify(t).replace(/"/g,'&quot;')})">
+      <div style="height:44px;background:linear-gradient(135deg,${g[0]},${g[1]});border-radius:10px 10px 0 0"></div>
+      <div class="dt-trip-card-inner"><span class="dt-trip-emoji">${t.emoji}</span><div class="dt-trip-info"><h3>${t.naam}</h3><p>${t.land}</p></div></div>
+    </div>`;
+  }).join('');
+
+  const importHtml=`<label class="pick-btn" for="dt-file-input" style="margin-top:10px;font-size:12px;padding:10px;cursor:pointer">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+    JSON importeren</label>
+    <input type="file" id="dt-file-input" accept=".json" style="display:none">`;
+
+  const sightsHtml=sights.length
+    ? `<p style="font-size:11px;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin:14px 0 6px;padding:0 4px">Bezienswaardigheden (${sights.length})</p>`
+      +sights.map(s=>`<div class="dt-sight-item" onclick="dtSelectSight(${JSON.stringify(s).replace(/"/g,'&quot;')})">
+        <div class="dt-sight-icon">${CAT_ICONS[s.categorie]||'📍'}</div>
+        <div class="dt-sight-info"><h4>${s.naam}</h4><p>${s.stad} · ${s.categorie}</p></div>
+      </div>`).join('')+importHtml
+    : `<div style="text-align:center;padding:20px 16px;color:var(--text3)"><p style="font-size:13px;margin-bottom:10px">Nog geen bezienswaardigheden</p>${importHtml}</div>`;
+
+  body.innerHTML=tripsHtml+sightsHtml;
+  document.getElementById('dt-file-input')?.addEventListener('change',dtHandleImport);
+  dtUpdateMap(sights);
+  dtShowEmptyDetail();
+}
+
+async function dtHandleImport(e){
+  const file=e.target.files[0];if(!file)return;
+  try{
+    const parsed=JSON.parse(await file.text());
+    const arr=Array.isArray(parsed)?parsed:[parsed];
+    const rows=arr.map(s=>({trip_id:dtSelectedTrip.id,naam:s.naam,categorie:s.categorie||'Overig',stad:s.stad||'',land:s.land||dtSelectedTrip.land,lat:parseFloat(s.lat),lng:parseFloat(s.lng),beschrijving:s.beschrijving||'',tips:s.tips||[],labels:s.labels||[],beste_periode:s.beste_periode||null,website:s.website||null,openingstijden:s.openingstijden||null}));
+    const {error}=await db.from('bezienswaardigheden').insert(rows);
+    if(error){toast('❌ '+error.message);return;}
+    toast(`✅ ${arr.length} bezienswaardigheid${arr.length>1?'en':''} toegevoegd`);
+    dtSelectTrip(dtSelectedTrip);
+  }catch(err){toast('❌ '+err.message);}
+}
+
+function dtSelectSight(sight){
+  document.querySelectorAll('.dt-sight-item').forEach(el=>el.classList.remove('selected'));
+  event?.currentTarget?.classList?.add('selected');
+  if(dtMap) dtMap.setView([sight.lat,sight.lng],13,{animate:true});
+  dtShowSightDetail(sight);
+}
+
+function dtShowSightDetail(sight){
+  document.getElementById('dt-empty-msg').style.display='none';
+  const content=document.getElementById('dt-info-content');
+  content.style.display='block';
+  const chips=[...(sight.labels||[])];
+  if(sight.beste_periode) chips.push(sight.beste_periode);
+  content.innerHTML=`
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:8px">
+      <div><p style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">${sight.categorie}</p>
+      <h2 class="dt-info-title">${sight.naam}</h2><p class="dt-info-loc">${sight.stad}, ${sight.land}</p></div>
+      <span style="font-size:28px">${CAT_ICONS[sight.categorie]||'📍'}</span>
+    </div>
+    ${chips.length?`<div class="chips">${chips.map(c=>`<span class="chip">${c}</span>`).join('')}</div>`:''}
+    <p class="dt-info-desc">${sight.beschrijving||''}</p>
+    ${(sight.tips||[]).map(t=>`<div class="tip-row"><div class="tip-dot"></div><p class="tip-text">${t}</p></div>`).join('')}
+    <div class="coord-row" style="margin-top:12px">
+      <div class="coord-box"><label>Breedtegraad</label><span>${parseFloat(sight.lat).toFixed(4)}° N</span></div>
+      <div class="coord-box"><label>Lengtegraad</label><span>${parseFloat(sight.lng).toFixed(4)}° O</span></div>
+    </div>
+    ${sight.openingstijden?`<p class="detail-label">Openingstijden</p><p class="desc-text">${sight.openingstijden}</p>`:''}
+    ${sight.website?`<p class="detail-label">Website</p><a href="${sight.website}" target="_blank" style="font-size:14px;color:var(--navy)">${sight.website}</a>`:''}`;
+}
+
+function dtShowEmptyDetail(){
+  const msg=document.getElementById('dt-empty-msg');
+  const content=document.getElementById('dt-info-content');
+  if(msg) msg.style.display='flex';
+  if(content) content.style.display='none';
+}
+
+function dtInitMap(){
+  if(dtMap){dtMap.remove();dtMap=null;}
+  const el=document.getElementById('dt-detail-map');
+  if(!el) return;
+  dtMap=L.map('dt-detail-map',{zoomControl:true,attributionControl:false});
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(dtMap);
+  dtMap.setView([20,0],2);
+}
+
+function dtUpdateMap(sights){
+  if(!dtMap) return;
+  dtMap.eachLayer(l=>{if(l instanceof L.Marker) dtMap.removeLayer(l);});
+  if(!sights.length) return;
+  const markers=sights.map(s=>{
+    const icon=L.divIcon({html:`<div style="background:#fff;border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:16px;box-shadow:0 2px 6px rgba(0,0,0,.25)">${CAT_ICONS[s.categorie]||'📍'}</div>`,iconSize:[32,32],iconAnchor:[16,16],className:''});
+    const m=L.marker([s.lat,s.lng],{icon}).addTo(dtMap);
+    m.on('click',()=>dtSelectSight(s));
+    return m;
+  });
+  try{dtMap.fitBounds(L.featureGroup(markers).getBounds().pad(0.3));}catch(e){}
+}
+
+async function dtRenderOntdekken(){
+  const body=document.getElementById('dt-list-body');
+  if(!body) return;
+  body.innerHTML='<p style="font-size:13px;color:var(--text3);padding:16px">Laden…</p>';
+  const trips=dtAllTrips;
+  if(!trips.length){body.innerHTML='<p style="font-size:13px;color:var(--text3);padding:16px">Voeg reizen toe om ze hier te zien.</p>';return;}
+  const {data:sights}=await db.from('bezienswaardigheden').select('*').in('trip_id',trips.map(t=>t.id));
+  const allS=sights||[];
+  const tripMap=Object.fromEntries(trips.map(t=>[t.id,t]));
+  const perTrip={};
+  allS.forEach(s=>{if(!perTrip[s.trip_id]) perTrip[s.trip_id]={trip:tripMap[s.trip_id],sights:[]};perTrip[s.trip_id].sights.push(s);});
+  body.innerHTML=Object.values(perTrip).map(({trip,sights})=>`
+    <p style="font-size:12px;font-weight:600;color:var(--text);margin:12px 0 6px;display:flex;align-items:center;gap:6px">
+      <span>${trip.emoji}</span>${trip.naam}<span style="font-size:10px;color:var(--text3);font-weight:400">${sights.length}×</span></p>
+    ${sights.map(s=>`<div class="dt-sight-item" onclick="dtOntdekSelectSight(${JSON.stringify(s).replace(/"/g,'&quot;')},${JSON.stringify(trip).replace(/"/g,'&quot;')})">
+      <div class="dt-sight-icon">${CAT_ICONS[s.categorie]||'📍'}</div>
+      <div class="dt-sight-info"><h4>${s.naam}</h4><p>${s.stad} · ${s.categorie}</p></div>
+    </div>`).join('')}`).join('');
+  if(!dtMap) dtInitMap();
+  dtUpdateMap(allS);
+}
+
+function dtOntdekSelectSight(sight,trip){
+  dtSelectedTrip=trip;
+  if(dtMap) dtMap.setView([sight.lat,sight.lng],13,{animate:true});
+  dtShowSightDetail(sight);
+}
+
+function dtAddTrip(){
+  const overlay=document.createElement('div');
+  overlay.id='dt-add-overlay';
+  overlay.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:2000;display:flex;align-items:center;justify-content:center';
+  let dtSelEmoji='🌍',dtSelStatus='idee';
+  overlay.innerHTML=`<div style="background:var(--bg);border-radius:20px;width:480px;max-height:80vh;overflow-y:auto;padding:28px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+      <h2 style="font-size:18px;font-weight:600">Nieuw reisplan</h2>
+      <button onclick="document.getElementById('dt-add-overlay').remove()" style="font-size:24px;color:var(--text2);line-height:1">×</button>
+    </div>
+    <span class="form-label">Vlag / emoji</span>
+    <div class="emoji-row" id="emo-dt">${EMOJIS.map(e=>`<button class="emoji-opt${e===dtSelEmoji?' selected':''}" onclick="(()=>{dtASelE('${e}');this.parentNode.querySelectorAll('.emoji-opt').forEach(b=>b.classList.toggle('selected',b.textContent==='${e}'))})()">${e}</button>`).join('')}</div>
+    <span class="form-label">Naam</span><input class="form-input" id="dta-naam" placeholder="bijv. Japan avontuur">
+    <span class="form-label">Land</span><input class="form-input" id="dta-land" placeholder="bijv. Japan">
+    <span class="form-label">Steden</span><input class="form-input" id="dta-steden" placeholder="bijv. Tokyo, Kyoto">
+    <span class="form-label">Status</span>
+    <div class="status-row" id="stat-dt">${STATUSES.map(s=>`<button class="status-opt${s===dtSelStatus?' selected':''}" onclick="(()=>{dtASelS('${s}');document.querySelectorAll('#stat-dt .status-opt').forEach(b=>b.classList.toggle('selected',b.textContent==='${s}'))})()">${s}</button>`).join('')}</div>
+    <button class="primary-btn" id="dta-save" style="margin-top:20px">Opslaan</button>
+  </div>`;
+  document.body.appendChild(overlay);
+  window.dtASelE=e=>dtSelEmoji=e;
+  window.dtASelS=s=>dtSelStatus=s;
+  document.getElementById('dta-save').addEventListener('click',async()=>{
+    const naam=document.getElementById('dta-naam').value.trim();
+    const land=document.getElementById('dta-land').value.trim();
+    const steden=document.getElementById('dta-steden').value.split(',').map(s=>s.trim()).filter(Boolean);
+    if(!naam||!land){toast('⚠️ Vul naam en land in');return;}
+    const {data:{user}}=await db.auth.getUser();
+    const {error}=await db.from('trips').insert({naam,land,emoji:dtSelEmoji,steden,status:dtSelStatus,user_id:user.id});
+    if(error){toast('❌ '+error.message);return;}
+    toast('✅ Reisplan aangemaakt');overlay.remove();
+    dtAllTrips=await loadTrips();renderTrips(dtAllTrips);dtRenderTrips();
+  });
+}
+
 // ── Profiel nav trigger ───────────────────────────────────────
 const origNavTo = navTo;
 function navTo(name){
@@ -931,14 +1404,24 @@ function navTo(name){
 // ── Boot ─────────────────────────────────────────────────────
 (async()=>{
   const { data:{ session } } = await db.auth.getSession();
-  if(session){
-    const trips = await loadTrips();
-    renderTrips(trips);
+  if(isDesktop()){
     document.getElementById('loading').style.display='none';
-    showScreen('reizen');
+    if(session){
+      await dtAfterLogin();
+    } else {
+      document.getElementById('desktop-login').classList.add('active');
+    }
   } else {
-    document.getElementById('loading').style.display='none';
-    showScreen('login');
+    // Mobiel
+    if(session){
+      const trips = await loadTrips();
+      renderTrips(trips);
+      document.getElementById('loading').style.display='none';
+      showScreen('reizen');
+    } else {
+      document.getElementById('loading').style.display='none';
+      showScreen('login');
+    }
   }
 })();
 </script>
