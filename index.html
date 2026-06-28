@@ -296,6 +296,27 @@ input,textarea{font-family:inherit}
     </div>
   </div>
 
+  <!-- ══ SCREEN: Ontdekken ══════════════════════════════════ -->
+  <div class="screen" id="screen-ontdekken">
+    <div class="hero-header">
+      <p class="sub">Jouw wereld</p>
+      <h1>Ontdekken</h1>
+      <p class="count" id="ontdek-count">laden…</p>
+    </div>
+    <div id="ontdek-map" style="flex:1"></div>
+    <!-- Land popup onderaan -->
+    <div id="land-panel" style="display:none;position:absolute;bottom:calc(var(--safe-bot)+72px);left:0;right:0;background:var(--surface);border-radius:20px 20px 0 0;border-top:0.5px solid var(--border);max-height:55%;overflow-y:auto;-webkit-overflow-scrolling:touch;z-index:500">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 16px 8px;position:sticky;top:0;background:var(--surface);border-bottom:0.5px solid var(--border)">
+        <div>
+          <p id="land-panel-emoji" style="font-size:24px;line-height:1"></p>
+          <h3 id="land-panel-title" style="font-size:17px;font-weight:600;color:var(--text)"></h3>
+        </div>
+        <button onclick="closeLandPanel()" style="width:30px;height:30px;border-radius:15px;background:var(--surfaceAlt);display:flex;align-items:center;justify-content:center;color:var(--text2);font-size:18px">×</button>
+      </div>
+      <div id="land-panel-sights" style="padding:10px 14px 20px"></div>
+    </div>
+  </div>
+
   <!-- ══ SCREEN: Fullscreen kaart ═══════════════════════════ -->
   <div class="screen" id="screen-fullmap" style="background:#000">
     <div style="position:absolute;top:calc(var(--safe-top)+12px);left:14px;z-index:1000">
@@ -328,8 +349,8 @@ input,textarea{font-family:inherit}
 
 <script>
 // ── CONFIG — vul jouw Supabase gegevens in ──────────────────
-const SUPA_URL = 'https://yzskoodpmwvqzhtwylac.supabase.co';
-const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl6c2tvb2RwbXd2cXpodHd5bGFjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI2MTc0OTQsImV4cCI6MjA5ODE5MzQ5NH0.UTQ90TeB2QdsB-jIwDfVs60efBzA2u2haS-iFLmSYik';
+const SUPA_URL = 'https://JOUW_PROJECT_ID.supabase.co';
+const SUPA_KEY = 'JOUW_ANON_KEY';
 // ───────────────────────────────────────────────────────────
 
 const { createClient } = supabase;
@@ -388,6 +409,7 @@ function showScreen(name){
   // Invalidate maps after show
   if(name==='trip') setTimeout(()=>leafMap&&leafMap.invalidateSize(),100);
   if(name==='fullmap') setTimeout(()=>fullLeafMap&&fullLeafMap.invalidateSize(),100);
+  if(name==='ontdekken') setTimeout(()=>{ loadOntdekken(); },100);
 }
 
 function navTo(name){
@@ -648,6 +670,122 @@ document.getElementById('btn-do-import').addEventListener('click', async()=>{
   toast(`✅ ${importData.length} bezienswaardigheid${importData.length>1?'en':''} toegevoegd`);
   showScreen('trip'); await loadSights();
 });
+
+// ── Ontdekken: wereldkaart ───────────────────────────────────
+let ontdekMap = null;
+let ontdekSights = [];
+let ontdekMarkers = [];
+
+async function loadOntdekken(){
+  // Haal alle bezienswaardigheden op van alle trips van de gebruiker
+  const { data:trips } = await db.from('trips').select('id,naam,land,emoji');
+  if(!trips||!trips.length){
+    document.getElementById('ontdek-count').textContent = 'Voeg reizen toe om ze hier te zien';
+    return;
+  }
+  const tripIds = trips.map(t=>t.id);
+  const tripMap = Object.fromEntries(trips.map(t=>[t.id,t]));
+
+  const { data:sights } = await db.from('bezienswaardigheden')
+    .select('*').in('trip_id', tripIds);
+  ontdekSights = (sights||[]).map(s=>({...s, _trip: tripMap[s.trip_id]}));
+
+  const landen = [...new Set(trips.map(t=>t.land))];
+  document.getElementById('ontdek-count').textContent =
+    `${landen.length} land${landen.length===1?'':'en'} · ${ontdekSights.length} bezienswaardigheden`;
+
+  renderOntdekMap();
+}
+
+function renderOntdekMap(){
+  if(ontdekMap){ ontdekMap.remove(); ontdekMap=null; }
+  ontdekMap = L.map('ontdek-map',{zoomControl:false,attributionControl:false});
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(ontdekMap);
+
+  if(!ontdekSights.length){ ontdekMap.setView([20,0],2); return; }
+
+  // Groepeer per trip
+  const perTrip = {};
+  ontdekSights.forEach(s=>{
+    if(!perTrip[s.trip_id]) perTrip[s.trip_id]={trip:s._trip,sights:[]};
+    perTrip[s.trip_id].sights.push(s);
+  });
+
+  ontdekMarkers = [];
+  Object.values(perTrip).forEach(({trip,sights})=>{
+    // Bereken middelpunt van alle bezienswaardigheden van dit land
+    const avgLat = sights.reduce((a,s)=>a+s.lat,0)/sights.length;
+    const avgLng = sights.reduce((a,s)=>a+s.lng,0)/sights.length;
+
+    // Land-marker (emoji + naam)
+    const icon = L.divIcon({
+      html:`<div style="background:var(--navy);color:#fff;border-radius:20px;padding:5px 10px;font-size:13px;font-weight:600;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,.3);display:flex;align-items:center;gap:5px">
+        <span>${trip.emoji}</span><span>${trip.land}</span>
+        <span style="background:rgba(255,255,255,.25);border-radius:10px;padding:1px 6px;font-size:11px">${sights.length}</span>
+      </div>`,
+      iconAnchor:[0,16], className:''
+    });
+    const m = L.marker([avgLat,avgLng],{icon}).addTo(ontdekMap);
+    m.on('click',()=>openLandPanel(trip, sights, avgLat, avgLng));
+    ontdekMarkers.push(m);
+
+    // Kleine pins per bezienswaardigheid
+    sights.forEach(s=>{
+      const sIcon = L.divIcon({
+        html:`<div style="background:#fff;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 2px 5px rgba(0,0,0,.2)">${CAT_ICONS[s.categorie]||'📍'}</div>`,
+        iconSize:[28,28],iconAnchor:[14,14],className:''
+      });
+      const sm = L.marker([s.lat,s.lng],{icon:sIcon}).addTo(ontdekMap);
+      sm.on('click',()=>{
+        openLandPanel(trip, sights, avgLat, avgLng);
+        // Scroll naar de juiste bezienswaardigheid na korte delay
+        setTimeout(()=>{
+          const el = document.getElementById('ontdek-sight-'+s.id);
+          if(el) el.scrollIntoView({behavior:'smooth',block:'center'});
+        }, 300);
+      });
+    });
+  });
+
+  // Fit alle markers in beeld
+  const group = L.featureGroup(ontdekMarkers);
+  try{ ontdekMap.fitBounds(group.getBounds().pad(0.3)); }
+  catch(e){ ontdekMap.setView([20,0],2); }
+}
+
+function openLandPanel(trip, sights, lat, lng){
+  document.getElementById('land-panel-emoji').textContent = trip.emoji;
+  document.getElementById('land-panel-title').textContent = trip.naam + ' — ' + sights.length + ' bezienswaardigheid' + (sights.length===1?'':'en');
+  document.getElementById('land-panel-sights').innerHTML = sights.map(s=>`
+    <div id="ontdek-sight-${s.id}" onclick="openSightFromOntdek(${JSON.stringify(s).replace(/"/g,'&quot;')}, ${JSON.stringify(trip).replace(/"/g,'&quot;')})"
+      style="display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:0.5px solid var(--border);cursor:pointer">
+      <div style="width:38px;height:38px;border-radius:10px;background:var(--surfaceAlt);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">${CAT_ICONS[s.categorie]||'📍'}</div>
+      <div style="flex:1;min-width:0">
+        <p style="font-size:14px;font-weight:500;color:var(--text)">${s.naam}</p>
+        <p style="font-size:11px;color:var(--text2);margin-top:2px">${s.stad} · ${s.categorie}</p>
+        <p style="font-size:12px;color:var(--text3);margin-top:4px;line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${s.beschrijving||''}</p>
+      </div>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text3)" stroke-width="2" stroke-linecap="round" style="flex-shrink:0;margin-top:4px"><path d="M9 18l6-6-6-6"/></svg>
+    </div>`).join('');
+  document.getElementById('land-panel').style.display='block';
+  // Zoom kaart in op dit land
+  ontdekMap.setView([lat,lng],7,{animate:true});
+}
+
+function closeLandPanel(){
+  document.getElementById('land-panel').style.display='none';
+  // Zoom terug uit
+  if(ontdekMarkers.length){
+    const group = L.featureGroup(ontdekMarkers);
+    try{ ontdekMap.fitBounds(group.getBounds().pad(0.3),{animate:true}); }catch(e){}
+  }
+}
+
+function openSightFromOntdek(sight, trip){
+  currentTrip = trip;
+  closeLandPanel();
+  openSight(sight);
+}
 
 // ── JSON example ─────────────────────────────────────────────
 document.getElementById('json-example').textContent = JSON.stringify({
