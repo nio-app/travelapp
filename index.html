@@ -158,6 +158,20 @@ input,textarea{font-family:inherit}
 .empty h3{font-size:17px;font-weight:500;margin-bottom:6px}
 .empty p{font-size:14px;color:var(--text2);line-height:1.6}
 
+/* ── Login screen ─────────────────────────────────────────── */
+#screen-login{background:linear-gradient(160deg,var(--navy),var(--navy2));justify-content:center;padding:40px 28px calc(var(--safe-bot)+40px)}
+.login-logo{font-size:52px;text-align:center;margin-bottom:8px}
+.login-title{font-size:26px;font-weight:700;color:#fff;text-align:center;margin-bottom:4px}
+.login-sub{font-size:14px;color:rgba(255,255,255,.6);text-align:center;margin-bottom:40px}
+.login-input{width:100%;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:12px;padding:14px 16px;font-size:15px;color:#fff;outline:none;margin-bottom:12px;-webkit-appearance:none}
+.login-input::placeholder{color:rgba(255,255,255,.4)}
+.login-input:focus{border-color:rgba(255,255,255,.5)}
+.login-btn{width:100%;background:#fff;color:var(--navy);border-radius:12px;padding:15px;font-size:15px;font-weight:700;margin-top:4px;cursor:pointer;border:none}
+.login-btn:disabled{opacity:.6}
+.login-switch{text-align:center;margin-top:20px;font-size:13px;color:rgba(255,255,255,.6)}
+.login-switch button{color:#fff;font-weight:600;font-size:13px;text-decoration:underline;background:none;border:none;cursor:pointer}
+.login-msg{text-align:center;font-size:13px;color:rgba(255,255,255,.8);margin-top:12px;min-height:20px}
+
 /* ── Toast ────────────────────────────────────────────────── */
 #toast{position:fixed;bottom:calc(var(--safe-bot) + 90px);left:50%;transform:translateX(-50%) translateY(20px);background:#1A1612;color:#fff;padding:10px 20px;border-radius:999px;font-size:13px;font-weight:500;opacity:0;transition:all .3s;z-index:999;white-space:nowrap;pointer-events:none}
 #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
@@ -178,6 +192,18 @@ input,textarea{font-family:inherit}
 <div id="toast"></div>
 
 <div id="app">
+
+  <!-- ══ SCREEN: Login ══════════════════════════════════════ -->
+  <div class="screen" id="screen-login">
+    <div class="login-logo">🌍</div>
+    <h1 class="login-title">ExoticTravel</h1>
+    <p class="login-sub">Jouw reizen, overal gesynchroniseerd</p>
+    <input class="login-input" id="login-email" type="email" placeholder="E-mailadres" autocomplete="email">
+    <input class="login-input" id="login-password" type="password" placeholder="Wachtwoord" autocomplete="current-password">
+    <button class="login-btn" id="btn-login">Inloggen</button>
+    <p class="login-msg" id="login-msg"></p>
+    <div class="login-switch">Nog geen account? <button onclick="toggleAuthMode()">Registreren</button></div>
+  </div>
 
   <!-- ══ SCREEN: Reizen ══════════════════════════════════════ -->
   <div class="screen active" id="screen-reizen">
@@ -329,6 +355,39 @@ input,textarea{font-family:inherit}
     <div id="fullmap-cards" style="position:absolute;bottom:calc(var(--safe-bot)+16px);left:0;right:0;overflow-x:auto;display:flex;gap:10px;padding:0 16px;-webkit-overflow-scrolling:touch;scrollbar-width:none"></div>
   </div>
 
+  <!-- ══ SCREEN: Profiel ════════════════════════════════════ -->
+  <div class="screen" id="screen-profiel">
+    <div class="hero-header">
+      <p class="sub">Ingelogd als</p>
+      <h1 id="profiel-email" style="font-size:17px;word-break:break-all">…</h1>
+    </div>
+    <div class="scroll-body">
+      <p class="detail-label">Statistieken</p>
+      <div style="display:flex;gap:10px;margin-bottom:20px">
+        <div style="flex:1;background:var(--surface);border-radius:12px;border:0.5px solid var(--border);padding:14px;text-align:center">
+          <p id="stat-trips" style="font-size:28px;font-weight:700;color:var(--navy)">—</p>
+          <p style="font-size:12px;color:var(--text2);margin-top:2px">Reizen</p>
+        </div>
+        <div style="flex:1;background:var(--surface);border-radius:12px;border:0.5px solid var(--border);padding:14px;text-align:center">
+          <p id="stat-sights" style="font-size:28px;font-weight:700;color:var(--teal)">—</p>
+          <p style="font-size:12px;color:var(--text2);margin-top:2px">Bezienswaardigheden</p>
+        </div>
+        <div style="flex:1;background:var(--surface);border-radius:12px;border:0.5px solid var(--border);padding:14px;text-align:center">
+          <p id="stat-landen" style="font-size:28px;font-weight:700;color:var(--sand)">—</p>
+          <p style="font-size:12px;color:var(--text2);margin-top:2px">Landen</p>
+        </div>
+      </div>
+      <p class="detail-label">Account</p>
+      <div style="background:var(--surface);border-radius:12px;border:0.5px solid var(--border);overflow:hidden">
+        <button onclick="doLogout()" style="width:100%;display:flex;align-items:center;gap:12px;padding:15px 16px;font-size:15px;font-weight:500;color:#E05C45;border-bottom:0.5px solid var(--border)">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+          Uitloggen
+        </button>
+        <div style="padding:15px 16px;font-size:13px;color:var(--text3)">ExoticTravel v1.0 — Data opgeslagen in Supabase</div>
+      </div>
+    </div>
+  </div>
+
   <!-- ══ Bottom nav ══════════════════════════════════════════ -->
   <div id="nav">
     <button class="nav-tab active" data-screen="reizen" onclick="navTo('reizen')">
@@ -419,11 +478,74 @@ function navTo(name){
   });
 }
 
-// ── Auth: anonymous sign-in ─────────────────────────────────
-async function ensureAuth(){
-  const { data:{ session } } = await db.auth.getSession();
-  if(!session) await db.auth.signInAnonymously();
+// ── Auth: e-mail login ──────────────────────────────────────
+let authMode = 'login'; // of 'register'
+
+function toggleAuthMode(){
+  authMode = authMode==='login' ? 'register' : 'login';
+  document.getElementById('btn-login').textContent = authMode==='login' ? 'Inloggen' : 'Account aanmaken';
+  document.querySelector('#screen-login .login-switch button').textContent = authMode==='login' ? 'Registreren' : 'Inloggen';
+  document.querySelector('#screen-login .login-switch').innerHTML =
+    authMode==='login'
+      ? 'Nog geen account? <button onclick="toggleAuthMode()">Registreren</button>'
+      : 'Al een account? <button onclick="toggleAuthMode()">Inloggen</button>';
+  document.getElementById('login-msg').textContent='';
 }
+
+document.getElementById('btn-login').addEventListener('click', async()=>{
+  const email    = document.getElementById('login-email').value.trim();
+  const password = document.getElementById('login-password').value;
+  const msg      = document.getElementById('login-msg');
+  const btn      = document.getElementById('btn-login');
+  if(!email||!password){ msg.textContent='⚠️ Vul e-mail en wachtwoord in'; return; }
+  btn.disabled=true; btn.textContent='Even wachten…';
+  let error;
+  if(authMode==='login'){
+    ({ error } = await db.auth.signInWithPassword({email,password}));
+  } else {
+    ({ error } = await db.auth.signUp({email,password}));
+    if(!error) { msg.textContent='✅ Check je e-mail om te bevestigen, log daarna in.'; btn.disabled=false; btn.textContent='Inloggen'; authMode='login'; return; }
+  }
+  btn.disabled=false; btn.textContent=authMode==='login'?'Inloggen':'Account aanmaken';
+  if(error){ msg.textContent='❌ '+error.message; return; }
+  await afterLogin();
+});
+
+async function afterLogin(){
+  document.getElementById('loading').style.display='flex';
+  const trips = await loadTrips();
+  renderTrips(trips);
+  updateProfiel();
+  document.getElementById('loading').style.display='none';
+  showScreen('reizen');
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.toggle('active',t.dataset.screen==='reizen'));
+}
+
+async function doLogout(){
+  await db.auth.signOut();
+  document.getElementById('login-email').value='';
+  document.getElementById('login-password').value='';
+  document.getElementById('login-msg').textContent='';
+  showScreen('login');
+}
+
+async function updateProfiel(){
+  const { data:{ user } } = await db.auth.getUser();
+  document.getElementById('profiel-email').textContent = user?.email||'';
+  const trips = await loadTrips();
+  const tripIds = trips.map(t=>t.id);
+  let sightCount = 0;
+  if(tripIds.length){
+    const { count } = await db.from('bezienswaardigheden').select('*',{count:'exact',head:true}).in('trip_id',tripIds);
+    sightCount = count||0;
+  }
+  const landen = [...new Set(trips.map(t=>t.land))].length;
+  document.getElementById('stat-trips').textContent  = trips.length;
+  document.getElementById('stat-sights').textContent = sightCount;
+  document.getElementById('stat-landen').textContent = landen;
+}
+
+// ── Boot ─────────────────────────────────────────────────────
 
 // ── Trips ───────────────────────────────────────────────────
 async function loadTrips(){
@@ -796,12 +918,28 @@ document.getElementById('json-example').textContent = JSON.stringify({
   labels:["UNESCO","Must-see"],beste_periode:"April–mei"
 },null,2);
 
+// ── Profiel nav trigger ───────────────────────────────────────
+const origNavTo = navTo;
+function navTo(name){
+  showScreen(name);
+  document.querySelectorAll('.nav-tab').forEach(t=>{
+    t.classList.toggle('active', t.dataset.screen===name);
+  });
+  if(name==='profiel') updateProfiel();
+}
+
 // ── Boot ─────────────────────────────────────────────────────
 (async()=>{
-  await ensureAuth();
-  const trips = await loadTrips();
-  renderTrips(trips);
-  document.getElementById('loading').style.display='none';
+  const { data:{ session } } = await db.auth.getSession();
+  if(session){
+    const trips = await loadTrips();
+    renderTrips(trips);
+    document.getElementById('loading').style.display='none';
+    showScreen('reizen');
+  } else {
+    document.getElementById('loading').style.display='none';
+    showScreen('login');
+  }
 })();
 </script>
 </body>
