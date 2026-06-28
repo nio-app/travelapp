@@ -5,11 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="ExoticTravel">
-<meta name="theme-color" content="#0D2B45">
+<meta name="apple-mobile-web-app-title" content="Selva">
+<meta name="theme-color" content="#1F3D2D">
 <link rel="apple-touch-icon" href="icon.png">
 <link rel="manifest" href="manifest.json">
-<title>ExoticTravel</title>
+<title>Selva — Reisdagboek</title>
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Hanken+Grotesk:wght@400;500;600;700&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet">
 
 <!-- Leaflet kaart -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
@@ -21,15 +26,15 @@
 /* ── Reset & base ─────────────────────────────────────────── */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 :root{
-  --navy:#0D2B45;--navy2:#1A4A6E;--teal:#1B7A6B;--teal2:#24A08C;
-  --sand:#E8C77A;--coral:#E05C45;
-  --bg:#F6F4EF;--surface:#FFFFFF;--surfaceAlt:#F0EDE6;
-  --border:#E4E0D6;--borderMid:#CCCAB8;
-  --text:#1A1612;--text2:#6B6457;--text3:#9E9484;
+  --navy:#1F3D2D;--navy2:#2C5A41;--teal:#4E7C59;--teal2:#2C5A41;
+  --sand:#C79A4B;--coral:#BC5B3C;
+  --bg:#F4EEE2;--surface:#FBF7EE;--surfaceAlt:#EFE7D6;
+  --border:#E4DCCB;--borderMid:#D8CCB2;
+  --text:#20281F;--text2:#5B6356;--text3:#9a8f78;
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-bot: env(safe-area-inset-bottom, 0px);
 }
-html,body{height:100%;overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text',sans-serif;background:var(--bg);color:var(--text);font-size:16px}
+html,body{height:100%;overflow:hidden;font-family:'Hanken Grotesk',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg);color:var(--text);font-size:16px}
 button{font-family:inherit;cursor:pointer;border:none;background:none}
 input,textarea{font-family:inherit}
 
@@ -325,13 +330,44 @@ input,textarea{font-family:inherit}
 #loading{position:fixed;inset:0;background:var(--navy);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;z-index:9999;color:#fff;font-size:15px}
 #loading .spinner{width:36px;height:36px;border:3px solid rgba(255,255,255,.2);border-top-color:#fff;border-radius:50%;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── Selva editorial overrides ─────────────────────────── */
+.hero-header h1,.sight-hero-content h2,.dt-info-title,.login-title,.dl-title,.empty h3,.section-hdr h3,.dt-panel-header h2,.topbar h2,.dt-panel-header h2{font-family:'Newsreader',serif;font-weight:500;letter-spacing:-.01em}
+.hero-header h1{font-size:30px;line-height:1.05}
+.hero-header .sub{letter-spacing:.16em;text-transform:uppercase;font-weight:600;opacity:.55}
+.trip-card-title h3,.sight-item-info h4,.dt-trip-info h3,.dt-sight-info h4,.preview-card h4{font-family:'Newsreader',serif;font-weight:500}
+.trip-card-title h3{font-size:21px}
+.sight-item-info h4{font-size:16px}
+.trip-emoji,.dt-trip-emoji{display:none}
+.trip-card-img{padding-left:16px}
+.trip-card-foot p,.dt-trip-info p{font-family:'Newsreader',serif;font-style:italic;font-size:13px;color:var(--text2)}
+.trip-card{border-radius:18px}
+.badge{font-weight:600;letter-spacing:.02em;text-transform:lowercase}
+.badge-gepland{background:#E7EFE5;color:#3A5A3F}
+.badge-idee{background:#EFE7D6;color:#7a6f55}
+.badge-wens{background:#F4EAD4;color:#8a6a22}
+.badge-geweest{background:#F2E0D7;color:#9A4A28}
+.chip{background:#E7EFE5;color:#3A5A3F}
+.chip.amber{background:#F4E4D5;color:#9A4A28}
+.info-box{background:#EFE7D6}
+.info-box p{color:#3A5A3F}
+.info-box svg{stroke:#3A5A3F !important}
+.fab{border-radius:18px}
+.sight-hero-content h2{font-size:24px}
+#sight-lat,#sight-lng,.preview-card .coords{font-family:'Spline Sans Mono',monospace}
+.sb-logo h1,.login-title,.dl-title{font-family:'Newsreader',serif;font-weight:500}
+.login-logo,.dl-logo,.sb-logo span{font-family:'Newsreader',serif;font-style:italic;font-weight:500}
+.login-sub,.dl-sub{font-family:'Newsreader',serif;font-style:italic}
+.leaflet-tile-pane{filter:saturate(1.06) sepia(.06) brightness(1.01)}
+.leaflet-container{background:#d7e0d3 !important}
+.code-block pre{color:#9EC9A4}
 </style>
 </head>
 <body>
 
 <div id="loading">
   <div class="spinner"></div>
-  <p>ExoticTravel laden…</p>
+  <p>Selva laden…</p>
 </div>
 
 <div id="toast"></div>
@@ -340,8 +376,8 @@ input,textarea{font-family:inherit}
 
   <!-- ══ SCREEN: Login ══════════════════════════════════════ -->
   <div class="screen" id="screen-login">
-    <div class="login-logo">🌍</div>
-    <h1 class="login-title">ExoticTravel</h1>
+    <div class="login-logo">S</div>
+    <h1 class="login-title">Selva</h1>
     <p class="login-sub">Jouw reizen, overal gesynchroniseerd</p>
     <input class="login-input" id="login-email" type="email" placeholder="E-mailadres" autocomplete="email">
     <input class="login-input" id="login-password" type="password" placeholder="Wachtwoord" autocomplete="current-password">
@@ -528,7 +564,7 @@ input,textarea{font-family:inherit}
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>
           Uitloggen
         </button>
-        <div style="padding:15px 16px;font-size:13px;color:var(--text3)">ExoticTravel v1.0 — Data opgeslagen in Supabase</div>
+        <div style="padding:15px 16px;font-size:13px;color:var(--text3)">Selva v1.0 — Data opgeslagen in Supabase</div>
       </div>
     </div>
   </div>
@@ -558,8 +594,8 @@ input,textarea{font-family:inherit}
 <!-- Desktop login -->
 <div id="desktop-login">
   <div class="dl-box">
-    <div class="dl-logo">🌍</div>
-    <h1 class="dl-title">ExoticTravel</h1>
+    <div class="dl-logo">S</div>
+    <h1 class="dl-title">Selva</h1>
     <p class="dl-sub">Jouw reizen, overal gesynchroniseerd</p>
     <input class="dl-input" id="dl-email" type="email" placeholder="E-mailadres" autocomplete="email">
     <input class="dl-input" id="dl-password" type="password" placeholder="Wachtwoord" autocomplete="current-password">
@@ -574,8 +610,8 @@ input,textarea{font-family:inherit}
   <!-- Sidebar -->
   <div id="sidebar">
     <div class="sb-logo">
-      <span>🌍</span>
-      <h1>ExoticTravel</h1>
+      <span>S</span>
+      <h1>Selva</h1>
     </div>
     <nav class="sb-nav">
       <div class="sb-item active" id="sb-reizen" onclick="dtNav('reizen')">
@@ -615,7 +651,7 @@ input,textarea{font-family:inherit}
       <div id="dt-detail-map"></div>
       <div id="dt-detail-info">
         <div class="dt-empty-detail" id="dt-empty-msg">
-          <div class="icon">🗺️</div>
+          <div class="icon"><svg viewBox="0 0 24 24" width="44" height="44" fill="none" stroke="#bdb29a" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2z"/><path d="M9 4v14M15 6v14"/></svg></div>
           <p>Selecteer een reis of bezienswaardigheid</p>
         </div>
         <div id="dt-info-content" style="display:none"></div>
@@ -645,23 +681,34 @@ let importData = [];
 let selectedEmoji = '🌍';
 let selectedStatus = 'idee';
 
-// ── Category icons ──────────────────────────────────────────
+// ── Category icons (line) ───────────────────────────────────
+const catSvg = (d)=>`<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#2C5A41" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">${d}</svg>`;
+const PIN = catSvg('<path d="M12 21s7-6.6 7-12a7 7 0 10-14 0c0 5.4 7 12 7 12z"/><circle cx="12" cy="9" r="2.4"/>');
 const CAT_ICONS = {
-  'Kasteel':'🏯','Tempel':'⛩️','Natuur':'🌿','Berg':'🗻','Strand':'🏖️',
-  'Museum':'🏛️','Markt':'🛒','Monument':'🗿','Paleis':'🏰',
-  'Moskee':'🕌','Kerk':'⛪','Overig':'📍'
+  'Kasteel':catSvg('<path d="M4 20h16M5 20V9l7-4 7 4v11M9 20v-6h6v6"/>'),
+  'Tempel':catSvg('<path d="M4 20h16M6 20V11l6-4 6 4v9M10 20v-5h4v5"/>'),
+  'Natuur':catSvg('<path d="M5 19C5 11 11 5 19 5c0 8-6 14-14 14z"/><path d="M5 19c4-4 8-6 12-7"/>'),
+  'Berg':catSvg('<path d="M3 19l6-10 4 6 2-3 6 7z"/>'),
+  'Strand':catSvg('<path d="M3 9c2-2 4 2 6 0s4-2 6 0 4 2 6 0M3 15c2-2 4 2 6 0s4-2 6 0 4 2 6 0"/>'),
+  'Museum':catSvg('<path d="M4 20h16M5 20V9l7-4 7 4v11M9 20v-6h6v6"/>'),
+  'Markt':catSvg('<path d="M5 8h14l-1 12H6z"/><path d="M9 8a3 3 0 016 0"/>'),
+  'Monument':catSvg('<path d="M4 20h16M5 20V9l7-4 7 4v11M9 20v-6h6v6"/>'),
+  'Paleis':catSvg('<path d="M4 20h16M5 20V9l7-4 7 4v11M9 20v-6h6v6"/>'),
+  'Moskee':catSvg('<path d="M4 20h16M5 20v-7a8 8 0 0114 0v7M12 5V2"/>'),
+  'Kerk':catSvg('<path d="M4 20h16M6 20v-8l6-4 6 4v8M12 8V3M9 6h6"/>'),
+  'Overig':PIN
 };
 
 // ── Gradient presets ────────────────────────────────────────
 const GRADS = {
-  '🇯🇵':['#1A3A2A','#0D2B45'],'🇲🇦':['#6B2D0F','#C4622D'],
-  '🇵🇪':['#1A3560','#2D7A8A'],'🇮🇳':['#7A2D00','#D45000'],
-  '🇹🇭':['#1A3A2A','#4A8040'],'🇧🇷':['#1A4020','#2D7A3A'],
-  '🇨🇳':['#6B0000','#B50000'],'🇪🇬':['#4A3800','#8B6800'],
-  '🇹🇿':['#1A4020','#1B7A6B'],'🇻🇳':['#6B0000','#8B2000'],
-  '🇲🇽':['#1A4020','#8B6800'],'🇬🇷':['#1A3560','#2D7A8A'],
-  '🇮🇸':['#1A3560','#4A6A8A'],'🇳🇵':['#6B0000','#1A3560'],
-  default:['#0D2B45','#1B7A6B']
+  '🇯🇵':['#2E6A63','#16332E'],'🇲🇦':['#8A4A2E','#33241F'],
+  '🇵🇪':['#3a7e76','#163a37'],'🇮🇳':['#8A4A2E','#33241F'],
+  '🇹🇭':['#2C5A41','#16302A'],'🇧🇷':['#2E6A63','#16332E'],
+  '🇨🇳':['#7A3F2C','#2f211c'],'🇪🇬':['#7d6630','#33291a'],
+  '🇹🇿':['#2C5A41','#16302A'],'🇻🇳':['#6f3a2a','#2f211c'],
+  '🇲🇽':['#5B8A63','#274030'],'🇬🇷':['#3a7e76','#163a37'],
+  '🇮🇸':['#3a7e76','#163a37'],'🇳🇵':['#8A4A2E','#33241F'],
+  default:['#2E6A63','#16302A']
 };
 function grad(emoji){ return GRADS[emoji]||GRADS.default; }
 
@@ -778,7 +825,7 @@ function renderTrips(trips){
   const count = document.getElementById('trip-count');
   count.textContent = `${trips.length} ${trips.length===1?'reis':'reizen'} gepland`;
   if(!trips.length){
-    list.innerHTML = `<div class="empty"><div class="icon">🌍</div><h3>Nog geen reizen</h3><p>Tik op + om je eerste reisplan aan te maken.</p></div>`;
+    list.innerHTML = `<div class="empty"><div class="icon"><svg viewBox="0 0 24 24" width="44" height="44" fill="none" stroke="#bdb29a" stroke-width="1.4" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 4 3 14 0 18M12 3c-3 4-3 14 0 18"/></svg></div><h3>Nog geen reizen</h3><p>Tik op + om je eerste reisplan aan te maken.</p></div>`;
     return;
   }
   list.innerHTML = trips.map(t=>{
@@ -799,7 +846,7 @@ function renderTrips(trips){
 
 async function openTrip(trip){
   currentTrip = trip;
-  document.getElementById('trip-detail-title').textContent = trip.emoji+' '+trip.naam;
+  document.getElementById('trip-detail-title').textContent = trip.naam;
   showScreen('trip');
   await loadSights();
 }
@@ -818,12 +865,12 @@ async function loadSights(){
 function renderSights(sights){
   const list = document.getElementById('sights-list');
   if(!sights.length){
-    list.innerHTML = `<div class="empty"><div class="icon">🗺️</div><h3>Nog geen bezienswaardigheden</h3><p>Importeer een JSON bestand om te beginnen.</p></div>`;
+    list.innerHTML = `<div class="empty"><div class="icon"><svg viewBox="0 0 24 24" width="44" height="44" fill="none" stroke="#bdb29a" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2z"/><path d="M9 4v14M15 6v14"/></svg></div><h3>Nog geen bezienswaardigheden</h3><p>Importeer een JSON bestand om te beginnen.</p></div>`;
     return;
   }
   list.innerHTML = sights.map(s=>`
     <div class="sight-item" onclick="openSight(${JSON.stringify(s).replace(/"/g,'&quot;')})">
-      <div class="sight-item-icon">${CAT_ICONS[s.categorie]||'📍'}</div>
+      <div class="sight-item-icon">${CAT_ICONS[s.categorie]||PIN}</div>
       <div class="sight-item-info">
         <h4>${s.naam}</h4>
         <p>${s.stad} · ${s.categorie}</p>
@@ -839,7 +886,7 @@ function renderTripMap(sights){
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(leafMap);
   if(!sights.length){ leafMap.setView([20,0],2); return; }
   const markers = sights.map(s=>{
-    const icon = L.divIcon({html:`<div style="background:#fff;border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:16px;box-shadow:0 2px 6px rgba(0,0,0,.25)">${CAT_ICONS[s.categorie]||'📍'}</div>`,iconSize:[32,32],iconAnchor:[16,16],className:''});
+    const icon = L.divIcon({html:`<div style="background:#fff;border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:16px;box-shadow:0 2px 6px rgba(0,0,0,.25)">${CAT_ICONS[s.categorie]||PIN}</div>`,iconSize:[32,32],iconAnchor:[16,16],className:''});
     const m = L.marker([s.lat,s.lng],{icon}).addTo(leafMap);
     m.bindPopup(`<b>${s.naam}</b><br><small>${s.stad}</small>`);
     return m;
@@ -908,13 +955,13 @@ document.getElementById('btn-fullmap').addEventListener('click',()=>{
     cards.innerHTML='';
     if(!allSights.length){ fullLeafMap.setView([20,0],2); return; }
     const markers = allSights.map(s=>{
-      const icon = L.divIcon({html:`<div style="background:#fff;border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 2px 8px rgba(0,0,0,.3)">${CAT_ICONS[s.categorie]||'📍'}</div>`,iconSize:[36,36],iconAnchor:[18,18],className:''});
+      const icon = L.divIcon({html:`<div style="background:#fff;border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 2px 8px rgba(0,0,0,.3)">${CAT_ICONS[s.categorie]||PIN}</div>`,iconSize:[36,36],iconAnchor:[18,18],className:''});
       const m = L.marker([s.lat,s.lng],{icon}).addTo(fullLeafMap);
       m.on('click',()=>fullLeafMap.setView([s.lat,s.lng],14,{animate:true}));
       // Card
       const card = document.createElement('div');
       card.style.cssText='min-width:130px;background:rgba(255,255,255,.95);border-radius:12px;padding:10px;border:0.5px solid var(--border);cursor:pointer;flex-shrink:0';
-      card.innerHTML=`<div style="font-size:22px;margin-bottom:4px">${CAT_ICONS[s.categorie]||'📍'}</div><div style="font-size:12px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${s.naam}</div><div style="font-size:11px;color:var(--text2);margin-top:1px">${s.stad}</div>`;
+      card.innerHTML=`<div style="font-size:22px;margin-bottom:4px">${CAT_ICONS[s.categorie]||PIN}</div><div style="font-size:12px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${s.naam}</div><div style="font-size:11px;color:var(--text2);margin-top:1px">${s.stad}</div>`;
       card.onclick=()=>fullLeafMap.setView([s.lat,s.lng],14,{animate:true});
       cards.appendChild(card);
       return m;
@@ -1061,7 +1108,7 @@ function renderOntdekMap(){
     // Land-marker (emoji + naam)
     const icon = L.divIcon({
       html:`<div style="background:var(--navy);color:#fff;border-radius:20px;padding:5px 10px;font-size:13px;font-weight:600;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,.3);display:flex;align-items:center;gap:5px">
-        <span>${trip.emoji}</span><span>${trip.land}</span>
+        <span>${trip.land}</span>
         <span style="background:rgba(255,255,255,.25);border-radius:10px;padding:1px 6px;font-size:11px">${sights.length}</span>
       </div>`,
       iconAnchor:[0,16], className:''
@@ -1073,7 +1120,7 @@ function renderOntdekMap(){
     // Kleine pins per bezienswaardigheid
     sights.forEach(s=>{
       const sIcon = L.divIcon({
-        html:`<div style="background:#fff;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 2px 5px rgba(0,0,0,.2)">${CAT_ICONS[s.categorie]||'📍'}</div>`,
+        html:`<div style="background:#fff;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 2px 5px rgba(0,0,0,.2)">${CAT_ICONS[s.categorie]||PIN}</div>`,
         iconSize:[28,28],iconAnchor:[14,14],className:''
       });
       const sm = L.marker([s.lat,s.lng],{icon:sIcon}).addTo(ontdekMap);
@@ -1095,12 +1142,12 @@ function renderOntdekMap(){
 }
 
 function openLandPanel(trip, sights, lat, lng){
-  document.getElementById('land-panel-emoji').textContent = trip.emoji;
+  document.getElementById('land-panel-emoji').textContent = '';
   document.getElementById('land-panel-title').textContent = trip.naam + ' — ' + sights.length + ' bezienswaardigheid' + (sights.length===1?'':'en');
   document.getElementById('land-panel-sights').innerHTML = sights.map(s=>`
     <div id="ontdek-sight-${s.id}" onclick="openSightFromOntdek(${JSON.stringify(s).replace(/"/g,'&quot;')}, ${JSON.stringify(trip).replace(/"/g,'&quot;')})"
       style="display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:0.5px solid var(--border);cursor:pointer">
-      <div style="width:38px;height:38px;border-radius:10px;background:var(--surfaceAlt);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">${CAT_ICONS[s.categorie]||'📍'}</div>
+      <div style="width:38px;height:38px;border-radius:10px;background:var(--surfaceAlt);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">${CAT_ICONS[s.categorie]||PIN}</div>
       <div style="flex:1;min-width:0">
         <p style="font-size:14px;font-weight:500;color:var(--text)">${s.naam}</p>
         <p style="font-size:11px;color:var(--text2);margin-top:2px">${s.stad} · ${s.categorie}</p>
@@ -1206,7 +1253,7 @@ function dtRenderTrips(){
   const body=document.getElementById('dt-list-body');
   if(!body) return;
   if(!dtAllTrips.length){
-    body.innerHTML='<div style="text-align:center;padding:40px 16px;color:var(--text3)"><div style="font-size:36px;margin-bottom:8px">🌍</div><p style="font-size:13px">Nog geen reizen.<br>Klik op "+ Nieuw" om te beginnen.</p></div>';
+    body.innerHTML='<div style="text-align:center;padding:40px 16px;color:var(--text3)"><div style="margin-bottom:8px"><svg viewBox="0 0 24 24" width="44" height="44" fill="none" stroke="#bdb29a" stroke-width="1.4" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 4 3 14 0 18M12 3c-3 4-3 14 0 18"/></svg></div><p style="font-size:13px">Nog geen reizen.<br>Klik op "+ Nieuw" om te beginnen.</p></div>';
     return;
   }
   body.innerHTML=dtAllTrips.map(t=>{
@@ -1245,7 +1292,7 @@ async function dtSelectTrip(trip){
   const sightsHtml=sights.length
     ? `<p style="font-size:11px;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin:14px 0 6px;padding:0 4px">Bezienswaardigheden (${sights.length})</p>`
       +sights.map(s=>`<div class="dt-sight-item" onclick="dtSelectSight(${JSON.stringify(s).replace(/"/g,'&quot;')})">
-        <div class="dt-sight-icon">${CAT_ICONS[s.categorie]||'📍'}</div>
+        <div class="dt-sight-icon">${CAT_ICONS[s.categorie]||PIN}</div>
         <div class="dt-sight-info"><h4>${s.naam}</h4><p>${s.stad} · ${s.categorie}</p></div>
       </div>`).join('')+importHtml
     : `<div style="text-align:center;padding:20px 16px;color:var(--text3)"><p style="font-size:13px;margin-bottom:10px">Nog geen bezienswaardigheden</p>${importHtml}</div>`;
@@ -1286,7 +1333,7 @@ function dtShowSightDetail(sight){
     <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:8px">
       <div><p style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">${sight.categorie}</p>
       <h2 class="dt-info-title">${sight.naam}</h2><p class="dt-info-loc">${sight.stad}, ${sight.land}</p></div>
-      <span style="font-size:28px">${CAT_ICONS[sight.categorie]||'📍'}</span>
+      <span style="font-size:28px">${CAT_ICONS[sight.categorie]||PIN}</span>
     </div>
     ${chips.length?`<div class="chips">${chips.map(c=>`<span class="chip">${c}</span>`).join('')}</div>`:''}
     <p class="dt-info-desc">${sight.beschrijving||''}</p>
@@ -1320,7 +1367,7 @@ function dtUpdateMap(sights){
   dtMap.eachLayer(l=>{if(l instanceof L.Marker) dtMap.removeLayer(l);});
   if(!sights.length) return;
   const markers=sights.map(s=>{
-    const icon=L.divIcon({html:`<div style="background:#fff;border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:16px;box-shadow:0 2px 6px rgba(0,0,0,.25)">${CAT_ICONS[s.categorie]||'📍'}</div>`,iconSize:[32,32],iconAnchor:[16,16],className:''});
+    const icon=L.divIcon({html:`<div style="background:#fff;border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:16px;box-shadow:0 2px 6px rgba(0,0,0,.25)">${CAT_ICONS[s.categorie]||PIN}</div>`,iconSize:[32,32],iconAnchor:[16,16],className:''});
     const m=L.marker([s.lat,s.lng],{icon}).addTo(dtMap);
     m.on('click',()=>dtSelectSight(s));
     return m;
@@ -1341,9 +1388,9 @@ async function dtRenderOntdekken(){
   allS.forEach(s=>{if(!perTrip[s.trip_id]) perTrip[s.trip_id]={trip:tripMap[s.trip_id],sights:[]};perTrip[s.trip_id].sights.push(s);});
   body.innerHTML=Object.values(perTrip).map(({trip,sights})=>`
     <p style="font-size:12px;font-weight:600;color:var(--text);margin:12px 0 6px;display:flex;align-items:center;gap:6px">
-      <span>${trip.emoji}</span>${trip.naam}<span style="font-size:10px;color:var(--text3);font-weight:400">${sights.length}×</span></p>
+      ${trip.naam}<span style="font-size:10px;color:var(--text3);font-weight:400">${sights.length}×</span></p>
     ${sights.map(s=>`<div class="dt-sight-item" onclick="dtOntdekSelectSight(${JSON.stringify(s).replace(/"/g,'&quot;')},${JSON.stringify(trip).replace(/"/g,'&quot;')})">
-      <div class="dt-sight-icon">${CAT_ICONS[s.categorie]||'📍'}</div>
+      <div class="dt-sight-icon">${CAT_ICONS[s.categorie]||PIN}</div>
       <div class="dt-sight-info"><h4>${s.naam}</h4><p>${s.stad} · ${s.categorie}</p></div>
     </div>`).join('')}`).join('');
   if(!dtMap) dtInitMap();
