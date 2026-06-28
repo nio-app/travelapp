@@ -5,11 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Selva">
+<meta name="apple-mobile-web-app-title" content="Nico's World">
 <meta name="theme-color" content="#1F3D2D">
 <link rel="apple-touch-icon" href="icon.png">
 <link rel="manifest" href="manifest.json">
-<title>Selva — Reisdagboek</title>
+<title>Nico's World — Reisdagboek</title>
 
 <!-- Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -31,7 +31,7 @@
   --bg:#F4EEE2;--surface:#FBF7EE;--surfaceAlt:#EFE7D6;
   --border:#E4DCCB;--borderMid:#D8CCB2;
   --text:#20281F;--text2:#5B6356;--text3:#9a8f78;
-  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-top: max(env(safe-area-inset-top, 0px), 48px);
   --safe-bot: env(safe-area-inset-bottom, 0px);
 }
 html,body{height:100%;overflow:hidden;font-family:'Hanken Grotesk',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg);color:var(--text);font-size:16px}
@@ -331,7 +331,7 @@ input,textarea{font-family:inherit}
 #loading .spinner{width:36px;height:36px;border:3px solid rgba(255,255,255,.2);border-top-color:#fff;border-radius:50%;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 
-/* ── Selva editorial overrides ─────────────────────────── */
+/* ── Nico's World editorial overrides ─────────────────────────── */
 .hero-header h1,.sight-hero-content h2,.dt-info-title,.login-title,.dl-title,.empty h3,.section-hdr h3,.dt-panel-header h2,.topbar h2,.dt-panel-header h2{font-family:'Newsreader',serif;font-weight:500;letter-spacing:-.01em}
 .hero-header h1{font-size:30px;line-height:1.05}
 .hero-header .sub{letter-spacing:.16em;text-transform:uppercase;font-weight:600;opacity:.55}
@@ -367,7 +367,7 @@ input,textarea{font-family:inherit}
 
 <div id="loading">
   <div class="spinner"></div>
-  <p>Selva laden…</p>
+  <p>Nico's World laden…</p>
 </div>
 
 <div id="toast"></div>
@@ -376,8 +376,8 @@ input,textarea{font-family:inherit}
 
   <!-- ══ SCREEN: Login ══════════════════════════════════════ -->
   <div class="screen" id="screen-login">
-    <div class="login-logo">S</div>
-    <h1 class="login-title">Selva</h1>
+    <div class="login-logo">N</div>
+    <h1 class="login-title">Nico's World</h1>
     <p class="login-sub">Jouw reizen, overal gesynchroniseerd</p>
     <input class="login-input" id="login-email" type="email" placeholder="E-mailadres" autocomplete="email">
     <input class="login-input" id="login-password" type="password" placeholder="Wachtwoord" autocomplete="current-password">
@@ -564,7 +564,7 @@ input,textarea{font-family:inherit}
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>
           Uitloggen
         </button>
-        <div style="padding:15px 16px;font-size:13px;color:var(--text3)">Selva v1.0 — Data opgeslagen in Supabase</div>
+        <div style="padding:15px 16px;font-size:13px;color:var(--text3)">Nico's World v1.0 — Data opgeslagen in Supabase</div>
       </div>
     </div>
   </div>
@@ -594,8 +594,8 @@ input,textarea{font-family:inherit}
 <!-- Desktop login -->
 <div id="desktop-login">
   <div class="dl-box">
-    <div class="dl-logo">S</div>
-    <h1 class="dl-title">Selva</h1>
+    <div class="dl-logo">N</div>
+    <h1 class="dl-title">Nico's World</h1>
     <p class="dl-sub">Jouw reizen, overal gesynchroniseerd</p>
     <input class="dl-input" id="dl-email" type="email" placeholder="E-mailadres" autocomplete="email">
     <input class="dl-input" id="dl-password" type="password" placeholder="Wachtwoord" autocomplete="current-password">
@@ -610,8 +610,7 @@ input,textarea{font-family:inherit}
   <!-- Sidebar -->
   <div id="sidebar">
     <div class="sb-logo">
-      <span>S</span>
-      <h1>Selva</h1>
+      <h1>Nico's World</h1>
     </div>
     <nav class="sb-nav">
       <div class="sb-item active" id="sb-reizen" onclick="dtNav('reizen')">
